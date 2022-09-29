@@ -62,7 +62,6 @@ class Client(BaseClient):
             config=boto_config,
             verify=verify,
         )
-        self.endpoint = marketplace.endpoint
         self.marketplace_id = marketplace.marketplace_id
         self.region = marketplace.region
         self.restricted_data_token = restricted_data_token
@@ -71,6 +70,8 @@ class Client(BaseClient):
         self.timeout = timeout
         self.version = version
         self.verify = verify
+        self.endpoint = os.environ.get('AMAZON_HOST', marketplace.endpoint)
+        self.scheme = os.environ.get('HTTP_SCHEMA', 'https://')
 
     def _get_cache_key(self, token_flavor=''):
         return 'role_' + hashlib.md5(
