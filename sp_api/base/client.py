@@ -78,7 +78,7 @@ class Client(BaseClient):
         self.version = version
         self.verify = verify
         self.endpoint = os.environ.get('AMAZON_HOST', marketplace.endpoint)
-        self.scheme = os.environ.get('HTTP_SCHEMA', 'https://')
+        self.scheme = os.environ.get('HTTP_SCHEMA', '')
 
     def _get_cache_key(self, token_flavor=''):
         if sit_env:
@@ -158,7 +158,7 @@ class Client(BaseClient):
         if not os.environ.get('SIT_ENV'):
             auth = self._sign_request()
         res = request(self.method,
-                      self.endpoint + self._check_version(path),
+                      self.scheme + self.endpoint + self._check_version(path),
                       params=params,
                       data=json.dumps(data) if data and self.method in ('POST', 'PUT', 'PATCH') else None,
                       headers=headers or self.headers,
